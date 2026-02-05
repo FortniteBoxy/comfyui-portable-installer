@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+
+# Runtime directories (created by install.bat)
+python_embedded/
+git_portable/
+ffmpeg_portable/
+venv/
+
+# ComfyUI installation (created by installer, includes models/)
+comfyui/
+
+# Legacy models directory (pre-v2.0, now inside comfyui/models/)
+models/
+
+# Model backup dir (created during purge/reinstall)
+_models_backup/
+
+# HuggingFace cache
+.hf_cache/
+.cache/
+
+# Temp files
+*.zip
+*.tmp
+_bootstrap_test.ps1
+_test_suite.py
+
+# IDE / tool files
+.claude/
+.vscode/
+.idea/
+
+# OS files
+Thumbs.db
+.DS_Store
+desktop.ini
