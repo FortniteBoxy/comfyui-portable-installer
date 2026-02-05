@@ -86,6 +86,10 @@ class InstallTab(ttk.Frame):
             self._update_comfyui, width=15
         )
         install_buttons.add_button(
+            "sage", "Install SageAttention",
+            self._install_sage_attention, width=20
+        )
+        install_buttons.add_button(
             "purge", "Purge ComfyUI",
             self._purge_comfyui, width=15
         )
@@ -148,6 +152,7 @@ class InstallTab(ttk.Frame):
         flags_frame.pack(fill=tk.X, pady=(5, 5))
 
         self.flag_vars = {}
+        self.flag_checkbuttons = {}
         for flag_id, flag_info in EXTRA_FLAGS.items():
             var = tk.BooleanVar(value=False)
             self.flag_vars[flag_id] = var
@@ -156,6 +161,7 @@ class InstallTab(ttk.Frame):
                 variable=var
             )
             cb.pack(anchor=tk.W, pady=1)
+            self.flag_checkbuttons[flag_id] = cb
             # Add tooltip-style description
             desc_label = ttk.Label(
                 flags_frame,
@@ -236,6 +242,11 @@ class InstallTab(ttk.Frame):
             self.server_buttons.disable("stop")
             self.main_window.set_server_status(False)
 
+        # Update SageAttention checkbox label based on install status
+        sa_installed = self.venv_manager.is_package_installed("sageattention")
+        sa_label = "SageAttention (installed)" if sa_installed else "SageAttention (not installed)"
+        self.flag_checkbuttons["sage_attention"].config(text=sa_label)
+
         self.log.log(f"Status: Python={'ready' if status['venv_created'] else 'not set up'}, "
                     f"ComfyUI={'installed' if status['comfyui_installed'] else 'not installed'}")
 
@@ -265,6 +276,43 @@ class InstallTab(ttk.Frame):
             else:
                 self.log.log("Installation failed! Check the log for details.")
                 self.main_window.set_status("Installation failed")
+            self._refresh_status()
+
+        self.main_window.run_async(do_install, on_complete)
+
+    def _install_sage_attention(self):
+        """Install Triton + SageAttention."""
+        if not self.venv_manager.is_created:
+            self.log.log("Python environment not set up. Run Full Install first.")
+            return
+
+        if self.venv_manager.is_package_installed("sageattention"):
+            from tkinter import messagebox
+            if not messagebox.askyesno(
+                "Already Installed",
+                "SageAttention is already installed.\n\nReinstall?"
+            ):
+                return
+
+        self.log.log("Installing Triton + SageAttention...")
+        self.log.log("  This enables 2-3x faster attention operations,")
+        self.log.log("  especially useful for video generation workflows.")
+        self.main_window.set_status("Installing SageAttention...")
+
+        def progress_callback(current, total, message):
+            if self.winfo_exists():
+                self.after(0, lambda: self._update_progress(current, total, message))
+
+        def do_install():
+            return self.venv_manager.install_sage_attention(progress_callback)
+
+        def on_complete(success):
+            if success:
+                self.log.log("SageAttention installed! Enable the checkbox below to use it.")
+                self.main_window.set_status("SageAttention installed")
+            else:
+                self.log.log("SageAttention installation failed. Check the log for details.")
+                self.main_window.set_status("SageAttention install failed")
             self._refresh_status()
 
         self.main_window.run_async(do_install, on_complete)

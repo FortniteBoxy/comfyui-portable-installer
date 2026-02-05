@@ -55,7 +55,7 @@ launcher.bat help                  :: Show all commands
 | tkinter | 3.12.8 | [nuget.org](https://www.nuget.org/packages/python/) | GUI toolkit for the installer |
 | Git | MinGit 2.47.1 | [git-for-windows](https://github.com/git-for-windows/git/releases) | Clones ComfyUI + custom nodes |
 | FFmpeg | Latest stable | [gyan.dev](https://www.gyan.dev/ffmpeg/builds/) | Video encode/decode for custom nodes |
-| PyTorch | Latest (cu124) | [pytorch.org](https://pytorch.org/) | GPU-accelerated inference |
+| PyTorch | Latest (cu128) | [pytorch.org](https://pytorch.org/) | GPU-accelerated inference |
 | ComfyUI | Latest | [Comfy-Org/ComfyUI](https://github.com/comfyanonymous/ComfyUI) | The image/video generation engine |
 
 Everything lives inside the project folder. Nothing is installed system-wide.
@@ -74,6 +74,7 @@ Everything lives inside the project folder. Nothing is installed system-wide.
 ### Management GUI
 - Visual installer with real-time progress and log output
 - VRAM mode selector with descriptions for each GPU tier
+- **One-click SageAttention install** (Triton + SageAttention for 2-3x faster attention, great for video)
 - Startup flags (SageAttention, CUDA Malloc, BF16/FP16 precision, live preview)
 - One-click server start/stop with browser launch
 - First-launch guidance for new users
@@ -283,6 +284,8 @@ This project is a wrapper/installer. The real work is done by these incredible p
 | **PyYAML** | [Kirill Simonov](https://pyyaml.org/) | [pyyaml.org](https://pyyaml.org/) |
 | **tqdm** | [tqdm developers](https://github.com/tqdm/tqdm) | [github.com/tqdm/tqdm](https://github.com/tqdm/tqdm) |
 | **websocket-client** | [websocket-client team](https://github.com/websocket-client/websocket-client) | [github.com/websocket-client/websocket-client](https://github.com/websocket-client/websocket-client) |
+| **triton-windows** | [woct0rdho](https://github.com/woct0rdho/triton-windows) | [github.com/woct0rdho/triton-windows](https://github.com/woct0rdho/triton-windows) |
+| **SageAttention** | [SageAttention team](https://github.com/thu-ml/SageAttention) | [github.com/thu-ml/SageAttention](https://github.com/thu-ml/SageAttention) |
 
 ### Model Providers
 

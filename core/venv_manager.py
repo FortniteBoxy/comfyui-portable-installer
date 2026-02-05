@@ -182,12 +182,47 @@ class VenvManager:
             return False
 
     def install_pytorch_cuda(self, progress_callback: Optional[Callable] = None) -> bool:
-        """Install PyTorch with CUDA support."""
+        """Install PyTorch with CUDA 12.8 support."""
         return self.install_package(
             "torch torchvision torchaudio",
             progress_callback,
-            extra_args=["--index-url", "https://download.pytorch.org/whl/cu124"]
+            extra_args=["--index-url", "https://download.pytorch.org/whl/cu128"]
         )
+
+    def install_sage_attention(self, progress_callback: Optional[Callable] = None) -> bool:
+        """Install Triton (Windows) + SageAttention for faster inference.
+
+        SageAttention provides ~2-3x speedup for attention operations,
+        especially beneficial for video generation workflows.
+        Requires CUDA 12.8+ PyTorch (cu128).
+        """
+        if not self.is_created:
+            if progress_callback:
+                progress_callback(0, 100, "Error: Python environment not ready")
+            return False
+
+        # Step 1: Install triton-windows
+        if progress_callback:
+            progress_callback(0, 100, "Installing Triton for Windows...")
+        if not self.install_package("triton-windows", progress_callback):
+            return False
+
+        # Step 2: Install sageattention
+        if progress_callback:
+            progress_callback(50, 100, "Installing SageAttention...")
+        if not self.install_package("sageattention", progress_callback):
+            return False
+
+        if progress_callback:
+            progress_callback(100, 100, "SageAttention installed successfully")
+        return True
+
+    def is_package_installed(self, package_name: str) -> bool:
+        """Check if a specific package is installed."""
+        installed = self.get_installed_packages()
+        # Normalize names: pip uses dashes, package names may use underscores
+        normalized = package_name.lower().replace("-", "_")
+        return any(p.lower().replace("-", "_") == normalized for p in installed)
 
     def run_command(
         self,

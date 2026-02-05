@@ -118,7 +118,7 @@ EXTRA_FLAGS = {
     "sage_attention": {
         "flag": "--use-sage-attention",
         "label": "SageAttention",
-        "description": "Use SageAttention for faster inference. Requires sage-attention package.",
+        "description": "2-3x faster attention. Great for video. Use 'Install SageAttention' button first.",
     },
     "cuda_malloc": {
         "flag": "--cuda-malloc",
