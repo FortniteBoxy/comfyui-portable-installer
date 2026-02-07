@@ -156,7 +156,7 @@ class CustomNodeManager:
 
         nodes = []
         for item in self.custom_nodes_dir.iterdir():
-            if item.is_dir() and not item.name.startswith("."):
+            if item.is_dir() and not item.name.startswith(".") and item.name != "__pycache__":
                 # Try to get more info about the node
                 info = {
                     "name": item.name,
