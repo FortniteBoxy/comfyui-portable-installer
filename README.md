@@ -6,6 +6,17 @@ Drop this folder on any Windows 10/11 machine, double-click `install.bat`, and w
 
 ---
 
+## Highlights
+
+- **Multi-GPU support** -- Auto-detects all NVIDIA GPUs and lets you run a separate ComfyUI instance on each one, simultaneously. Got two GPUs? Run two workflows at once. Got four? Run four.
+- **Multi-instance management** -- Spin up multiple ComfyUI servers from the GUI with one click. Each gets its own GPU, port, VRAM mode, and log prefix. Start All / Stop All controls for easy batch management.
+- **101 pre-built models** -- Covers every default ComfyUI workflow template. Flux 1.x & 2, SDXL, SD 3.5, SD 1.5, LTX-2, HunyuanVideo, Wan 2.1, and more. Download with one click, sorted by category and VRAM tier.
+- **16 curated custom nodes** -- Essential and recommended extensions, one-click install with automatic dependency handling.
+- **SageAttention** -- One-click install for 2-3x faster attention computation (Triton + SageAttention), especially beneficial for video generation.
+- **Zero dependencies** -- No Python, no Git, no CUDA toolkit, no Docker, no admin rights. Everything downloads automatically into one portable folder.
+
+---
+
 ## Why This Exists
 
 Getting ComfyUI running typically means:
@@ -27,10 +38,12 @@ Getting ComfyUI running typically means:
 2. Double-click install.bat
 3. Click "Full Install" in the GUI
 4. Go to Models tab, download a model
-5. Add a server instance, click "Start", then "Open UI"
+5. Add a server instance (pick your GPU), click "Start", then "Open UI"
 ```
 
 That's it. No `pip install`, no `conda activate`, no `docker compose up`, no YAML configs.
+
+> **Multiple GPUs?** Add an instance for each GPU from the GUI. Each gets its own port and runs independently. Or from the CLI: `launcher.bat run --gpu 0` in one terminal, `launcher.bat run --gpu 1 --port 8189` in another.
 
 ### Command Line
 
@@ -175,7 +188,7 @@ Pre-defined models for all of ComfyUI's 312 default workflow templates:
 
 ## Multi-GPU & Multi-Instance
 
-Run multiple ComfyUI servers in parallel -- one per GPU, or several per GPU if VRAM allows.
+**Run multiple ComfyUI servers in parallel** -- one per GPU, or several per GPU if VRAM allows. Saturate all your hardware with zero configuration.
 
 ### How It Works
 
