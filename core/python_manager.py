@@ -254,7 +254,8 @@ class PythonManager:
             if progress_callback:
                 progress_callback(0, 100, f"Installing {package}...")
 
-            cmd = [str(self.python_exe), "-m", "pip", "install", package]
+            packages = package.split()
+            cmd = [str(self.python_exe), "-m", "pip", "install"] + packages
             if extra_args:
                 cmd.extend(extra_args)
 

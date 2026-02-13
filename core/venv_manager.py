@@ -116,10 +116,12 @@ class VenvManager:
                 progress_callback(0, 100, f"Installing {package}...")
 
             # Use python -m pip for embedded Python (more reliable)
+            # Split package string to handle multi-package installs (e.g. "torch torchvision torchaudio")
+            packages = package.split()
             if self._use_embedded:
-                cmd = [str(self.venv_python), "-m", "pip", "install", package]
+                cmd = [str(self.venv_python), "-m", "pip", "install"] + packages
             else:
-                cmd = [str(self.venv_pip), "install", package]
+                cmd = [str(self.venv_pip), "install"] + packages
 
             if extra_args:
                 cmd.extend(extra_args)
