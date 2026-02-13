@@ -39,7 +39,7 @@ async def add_instance(request: web.Request) -> web.Response:
     im: InstanceManager = request.app["instance_manager"]
     log_hub = request.app["log_hub"]
 
-    gpu_device = data.get("gpu_device", "0")
+    gpu_device = str(data.get("gpu_device", "0"))
     gpu_label = data.get("gpu_label", f"GPU {gpu_device}")
     port = data.get("port", im.next_available_port())
     host = data.get("host", DEFAULT_HOST)

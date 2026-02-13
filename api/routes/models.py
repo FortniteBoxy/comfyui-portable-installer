@@ -91,11 +91,18 @@ async def get_local(request: web.Request) -> web.Response:
 
 
 async def post_download(request: web.Request) -> web.Response:
-    """Download models by ID. Returns a job ID."""
+    """Download models by registry ID or by direct model info. Returns a job ID.
+
+    Accepts either:
+      {"model_ids": ["flux_dev", "sdxl_base"]}  — registry IDs
+      {"models": [{"repo": "...", "filename": "...", "folder": "..."}]}  — direct HF info
+    Both can be combined in a single request.
+    """
     data = await request.json()
     model_ids = data.get("model_ids", [])
-    if not model_ids:
-        raise ValueError("'model_ids' list is required")
+    direct_models = data.get("models", [])
+    if not model_ids and not direct_models:
+        raise ValueError("'model_ids' list or 'models' list is required")
 
     downloader: ModelDownloader = request.app["model_downloader"]
     jm: JobManager = request.app["job_manager"]
@@ -108,6 +115,16 @@ async def post_download(request: web.Request) -> web.Response:
         info = MODELS[mid]
         if not downloader.check_model_exists(info):
             models_to_download.append({**info, "id": mid})
+
+    for model in direct_models:
+        if not model.get("repo") and not model.get("url"):
+            raise ValueError("Each model needs a 'repo' (HuggingFace) or 'url' (direct download)")
+        if not model.get("filename"):
+            raise ValueError("Each model needs a 'filename'")
+        if not model.get("folder"):
+            raise ValueError("Each model needs a 'folder' (e.g. 'checkpoints', 'loras', 'vae')")
+        if not downloader.check_model_exists(model):
+            models_to_download.append(model)
 
     if not models_to_download:
         return web.json_response({

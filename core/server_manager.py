@@ -139,7 +139,7 @@ class ServerManager:
                 if gpu_device == "cpu":
                     env["CUDA_VISIBLE_DEVICES"] = ""
                 else:
-                    env["CUDA_VISIBLE_DEVICES"] = gpu_device
+                    env["CUDA_VISIBLE_DEVICES"] = str(gpu_device)
             else:
                 env.pop("CUDA_VISIBLE_DEVICES", None)
 
